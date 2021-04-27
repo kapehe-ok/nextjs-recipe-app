@@ -1,7 +1,8 @@
-import Head from "next/head";
-import styles from "../styles/Home.module.css";
-import Link from "next/link";
-import sanityClient from "../lib/client";
+import Head from 'next/head'
+import Link from 'next/link'
+import { sanityClient } from '../lib/client'
+
+import styles from '../styles/Home.module.css'
 
 export default function Home({ recipes }) {
   return (
@@ -16,15 +17,15 @@ export default function Home({ recipes }) {
 
         {/* show all recipes */}
         <div className="recipe-card">
-          {recipes.map((recipe, index) => (
-            <Link href={`/recipes/${recipe.slug.current}`} key={index}>
-              <a>{recipe.name}</a>
+          {recipes.map(recipe => (
+            <Link href={`/recipes/${recipe?.slug?.current}`} key={recipe?._id}>
+              <a>{recipe?.name}</a>
             </Link>
           ))}
         </div>
       </main>
     </div>
-  );
+  )
 }
 
 export async function getStaticProps() {
@@ -32,10 +33,11 @@ export async function getStaticProps() {
   // DO IT
   const recipes = await sanityClient.fetch(
     `*[_type == "recipe"]{
+      _id,
       name,
       slug
     }`
-  );
+  )
 
-  return { props: { recipes } };
+  return { props: { recipes } }
 }
