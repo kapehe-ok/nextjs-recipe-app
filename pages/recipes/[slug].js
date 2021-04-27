@@ -2,14 +2,14 @@ import { sanityClient } from '../../lib/client'
 
 export default function OneRecipe({ recipe }) {
   return (
-    <React.Fragment>
+    <>
       <h1>This is my first recipe! And it's yummy!</h1>
       <h2>{recipe?.name}</h2>
       {/* <img src={recipe.image} /> */}
 
       {/* probably need to map over ingredients since it will be an array */}
       {/* <div>{recipe.ingredients}</div> */}
-    </React.Fragment>
+    </>
   )
 }
 
