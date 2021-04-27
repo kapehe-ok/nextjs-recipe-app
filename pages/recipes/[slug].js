@@ -1,4 +1,4 @@
-import sanityClient from "../../lib/client";
+import {sanityClient} from "../../lib/client";
 
 export default function OneRecipe({ recipe }) {
   return (
@@ -16,17 +16,13 @@ export default function OneRecipe({ recipe }) {
 // STEP 1: tell next.js how many recipe pages it needs to make
 export async function getStaticPaths() {
   // go get all recipes
-  const recipes = await sanityClient.fetch(
-    `*[_type == "recipe"]{
-      name,
-      slug
-    }`
+  const paths = await sanityClient.fetch(
+    `*[_type == "recipe" && defined(slug.current)]{
+      "params": {
+        "slug": slug.current`
+      }
+    }
   );
-
-  // loop over recipes to create the params array so next.js knows each recipe's slug
-  const paths = recipes.map((recipe) => ({
-    params: { slug: recipe.slug.current },
-  }));
 
   return {
     paths,
@@ -47,14 +43,15 @@ export async function getStaticPaths() {
 
 // STEP 2: tell next.js how to get data for each individual recipe
 export async function getStaticProps({ params }) {
+  const { slug } = params
   // go get the recipe data from sanity using groq
   // const recipe = sanity groq query using params.slug
-  const recipes = await sanityClient.fetch(
-    `*[_type == "recipe" && slug.current == "${params.slug}"]{
+  const recipe = await sanityClient.fetch(
+    `*[_type == "recipe" && slug.current == $slug][0]{
       name,
       slug
-    }`
+    }`, { slug }
   );
 
-  return { props: { recipe: recipes[0] } };
+  return { props: { recipe } };
 }
