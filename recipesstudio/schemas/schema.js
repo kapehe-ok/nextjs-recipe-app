@@ -6,8 +6,8 @@ import schemaTypes from "all:part:@sanity/base/schema-type";
 
 // importing the individual schemas
 import recipe from "./recipe";
-// import chef from "./chef";
-// import category from "./category";
+import chef from "./chef";
+import ingredient from "./ingredient";
 
 // Then we give our schema to the builder and provide the result to Sanity
 export default createSchema({
@@ -17,8 +17,8 @@ export default createSchema({
   // to the ones provided by any plugins that are installed
   types: schemaTypes.concat([
     /* Your types here! */
-    // category,
-    // chef,
+    ingredient,
+    chef,
     recipe,
   ]),
 });

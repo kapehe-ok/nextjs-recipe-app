@@ -1,6 +1,6 @@
 export default {
-  name: "creator",
-  title: "Creator",
+  name: "chef",
+  title: "Chef",
   type: "document",
   fields: [
     {

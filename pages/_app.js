@@ -4,13 +4,31 @@ import "../styles/globals.css";
 function MyApp({ Component, pageProps }) {
   return (
     <>
-      <nav>
-        <Link href="/">
-          <a>Home page - LOGO GOES HERE</a>
-        </Link>
+      <nav className="header">
+        {/* left side */}
+        <div>
+          <Link href="/">
+            <a>Kap's Kitchen</a>
+          </Link>
+        </div>
+
+        {/* right side */}
+        <div>
+          <Link href="/">
+            <a>Home page</a>
+          </Link>
+          <Link href="/">
+            <a>Home page</a>
+          </Link>
+          <Link href="/">
+            <a>Home page</a>
+          </Link>
+        </div>
       </nav>
 
-      <Component {...pageProps} />
+      <main>
+        <Component {...pageProps} />
+      </main>
     </>
   );
 }

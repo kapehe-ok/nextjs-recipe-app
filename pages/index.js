@@ -1,31 +1,37 @@
-import Head from 'next/head'
-import Link from 'next/link'
-import { sanityClient } from '../lib/client'
+import Head from "next/head";
+import Link from "next/link";
+import { sanityClient } from "../lib/client";
+import imageUrlBuilder from "@sanity/image-url";
 
-import styles from '../styles/Home.module.css'
+function urlFor(source) {
+  return imageUrlBuilder(sanityClient).image(source);
+}
 
 export default function Home({ recipes }) {
   return (
-    <div className={styles.container}>
+    <div>
       <Head>
         <title>Giada's Butter Factory</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>Welcome to Giada's Butter Factory</h1>
+      <h1>Welcome to Giada's Butter Factory</h1>
 
-        {/* show all recipes */}
-        <div className="recipe-card">
-          {recipes.map(recipe => (
-            <Link href={`/recipes/${recipe?.slug?.current}`} key={recipe?._id}>
-              <a>{recipe?.name}</a>
+      {/* show all recipes */}
+      <div className="recipes-list">
+        {recipes.map((recipe) => (
+          <div key={recipe._id} className="recipe-card">
+            <Link href={`/recipes/${recipe.slug.current}`}>
+              <a>
+                <img src={urlFor(recipe.mainImage).url()} />
+                <span>{recipe.name}</span>
+              </a>
             </Link>
-          ))}
-        </div>
-      </main>
+          </div>
+        ))}
+      </div>
     </div>
-  )
+  );
 }
 
 export async function getStaticProps() {
@@ -35,9 +41,15 @@ export async function getStaticProps() {
     `*[_type == "recipe"]{
       _id,
       name,
-      slug
+      slug,
+      mainImage{
+        asset->{
+          _id,
+          url
+        }
+      },
     }`
-  )
+  );
 
-  return { props: { recipes } }
+  return { props: { recipes } };
 }
