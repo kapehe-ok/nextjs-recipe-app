@@ -11,12 +11,13 @@ export default function OneRecipe({ recipe }) {
   const [likes, setLikes] = useState(recipe.likes);
 
   const addLike = async () => {
-    const { likes: newLikes } = await sanityClient
-      .fetch("/api/handle-like", {
-        method: "POST",
-        body: JSON.stringify({ _id: recipe._id }),
-      })
-      .then((response) => response.json());
+    console.log(recipe);
+    const res = await fetch("/api/handle-like", {
+      method: "POST",
+      body: JSON.stringify({ _id: recipe._id }),
+    });
+
+    const data = await res.json();
 
     setLikes(newLikes);
   };
@@ -98,6 +99,7 @@ export async function getStaticProps({ params }) {
   // const recipe = sanity groq query using params.slug
   const recipe = await sanityClient.fetch(
     `*[_type == "recipe" && slug.current == $slug][0]{
+      _id,
       name,
       slug,
       mainImage{

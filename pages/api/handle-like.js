@@ -8,6 +8,5 @@ export default async (req, res) => {
   const { _id } = JSON.parse(req.body);
   const data = await sanityClient.patch(_id).inc({ likes: 1 }).commit();
 
-  res.statusCode = 200;
-  res.json({ likes: data.likes });
+  res.status(200).json({ likes: data.likes });
 };
