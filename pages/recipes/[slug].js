@@ -15,11 +15,11 @@ export default function OneRecipe({ recipe }) {
     const res = await fetch("/api/handle-like", {
       method: "POST",
       body: JSON.stringify({ _id: recipe._id }),
-    });
+    }).catch((error) => console.log(error));
 
     const data = await res.json();
-
-    setLikes(newLikes);
+    console.log(data);
+    setLikes(data.likes);
   };
 
   return (
@@ -28,7 +28,7 @@ export default function OneRecipe({ recipe }) {
 
       {/* likes */}
       <button className="like-button" onClick={addLike}>
-        {recipe.likes}{" "}
+        {likes}{" "}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"

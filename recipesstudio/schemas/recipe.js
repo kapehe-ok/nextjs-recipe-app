@@ -78,12 +78,28 @@ export default {
               },
             },
           ],
-          // preview: {
-          //   select: {
-          //     title: "Ingredient",
-          //     name: "ingredient",
-          //   },
-          // },
+          preview: {
+            select: {
+              title: "ingredient.name",
+              name: "ingredient.name",
+              media: "ingredient.image",
+              fraction: "fraction",
+              unit: "unit",
+            },
+            prepare({
+              title,
+              subtitle,
+              media,
+              fraction = "(No fraction set)",
+              unit = "(No unit set)",
+            }) {
+              return {
+                title,
+                subtitle: `${fraction} ${unit}`,
+                media,
+              };
+            },
+          },
         },
       ],
     },
