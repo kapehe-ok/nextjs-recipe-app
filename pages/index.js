@@ -18,18 +18,18 @@ export default function Home({ recipes }) {
       <h1>Welcome to Giada's Butter Factory</h1>
 
       {/* show all recipes */}
-      <div className="recipes-list">
+      <ul className="recipes-list">
         {recipes.map((recipe) => (
-          <div key={recipe._id} className="recipe-card">
+          <li key={recipe._id} className="recipe-card">
             <Link href={`/recipes/${recipe.slug.current}`}>
               <a>
                 <img src={urlFor(recipe.mainImage).url()} />
                 <span>{recipe.name}</span>
               </a>
             </Link>
-          </div>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   );
 }
