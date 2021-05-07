@@ -1,26 +1,58 @@
-import { useState } from "react";
-import BlockContent from "@sanity/block-content-to-react";
-import imageUrlBuilder from "@sanity/image-url";
-import { sanityClient } from "../../lib/client";
+import { useState } from 'react'
+import imageUrlBuilder from '@sanity/image-url'
+import { sanityClient, urlFor, usePreviewSubscription, PortableText } from '../../lib/sanity'
 
-function urlFor(source) {
-  return imageUrlBuilder(sanityClient).image(source);
-}
+const recipeQuery = `*[_type == "recipe" && slug.current == $slug][0]{
+      _id,
+      name,
+      slug,
+      mainImage{
+        asset->{
+          _id,
+          url
+        }
+      },
+      ingredient[]{
+        unit,
+        wholeNumber,
+        fraction,
+        ingredient->{
+          name
+        }
+      },
+      instructions,
+      likes
+    }`
 
-export default function OneRecipe({ recipe }) {
-  const [likes, setLikes] = useState(recipe.likes);
-  console.log(recipe);
+export default function OneRecipe({ data, preview }) {
+
+  /**
+   * This is the real-time preview functionality.
+   * It takes the same GROQ query we use to fetch the data,
+   * and then an object that takes parameters, in this case the slug from the document,
+   * and the initial data which is the data we're fetching in getStaticProps,
+   * we also pass the preview variable to enable preview, more on that below
+   */
+  const { data: recipe } = usePreviewSubscription(recipeQuery, {
+    params: { slug: data.recipe?.slug.current },
+    initialData: data,
+    enabled: preview,
+  });
+
+  // we initialize the likes state with the number of likes in the fetched document
+  const [likes, setLikes] = useState(data?.recipe?.likes)
+
+  // whenever we push the button, we do a request to a serverless function/API-route
   const addLike = async () => {
-    console.log(recipe);
-    const res = await fetch("/api/handle-like", {
-      method: "POST",
-      body: JSON.stringify({ _id: recipe._id }),
-    }).catch((error) => console.log(error));
+    const res = await fetch('/api/handle-like', {
+      method: 'POST',
+      body: JSON.stringify({ _id: recipe._id })
+    }).catch(error => console.log(error))
 
-    const data = await res.json();
-    console.log(data);
-    setLikes(data.likes);
-  };
+    const data = await res.json()
+
+    setLikes(data.likes)
+  }
 
   return (
     <div className="recipe">
@@ -46,26 +78,24 @@ export default function OneRecipe({ recipe }) {
 
       {/* the content for the recipe */}
       <div className="content">
-        <img src={urlFor(recipe.mainImage).url()} />
+        <img src={urlFor(recipe?.mainImage).url()} />
 
         <div className="breakdown">
           <div className="ingredients">
             {recipe.ingredient?.map((ingredient, index) => (
               <div key={index} className="ingredient">
-                {ingredient.wholeNumber}
-                {ingredient.fraction}
-                {ingredient.unit}
-                <div></div>
-                {ingredient.ingredient.name}
+                {ingredient?.wholeNumber}
+                {ingredient?.fraction}
+                {ingredient?.unit}
+                <div />
+                {ingredient?.ingredient?.name}
               </div>
             ))}
           </div>
 
           <div className="instructions">
-            <BlockContent
-              blocks={recipe.instructions}
-              projectId={sanityClient.clientConfig.projectId}
-              dataset={sanityClient.clientConfig.dataset}
+            <PortableText
+              blocks={recipe?.instructions}
             />
           </div>
         </div>
@@ -83,54 +113,24 @@ export async function getStaticPaths() {
         "slug": slug.current
       }
     }`
-  );
+  )
 
   return {
     paths,
-    // paths: [
-    //   { params: { slug: 'first-recipe' }},
-    //   { params: { slug: 'first-recipe' }},
-    //   { params: { slug: 'first-recipe' }},
-    //   { params: { slug: 'first-recipe' }},
-    //   { params: { slug: 'first-recipe' }},
-    // ],
     // set to true if you want incremental static regeneration
     // goes to check sanity for the content every page load
     // if content is changed/new, then next.js gives user the new version
     // if content is the same, next.js gives user the cached static HTML version
-    fallback: true,
-  };
+    fallback: true
+  }
 }
 
 // STEP 2: tell next.js how to get data for each individual recipe
 export async function getStaticProps({ params }) {
-  const { slug } = params;
+  const { slug } = params
   // go get the recipe data from sanity using groq
   // const recipe = sanity groq query using params.slug
-  const recipe = await sanityClient.fetch(
-    `*[_type == "recipe" && slug.current == $slug][0]{
-      _id,
-      name,
-      slug,
-      mainImage{
-        asset->{
-          _id,
-          url
-        }
-      },
-      ingredient[]{
-        unit,
-        wholeNumber,
-        fraction,
-        ingredient->{
-          name
-        }
-      },
-      instructions,
-      likes
-    }`,
-    { slug }
-  );
-
-  return { props: { recipe } };
+  const recipe = await sanityClient.fetch(recipeQuery, { slug })
+  // we just pass
+  return { props: { data: {recipe}, preview: true } }
 }

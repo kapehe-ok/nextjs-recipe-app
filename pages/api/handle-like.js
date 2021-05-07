@@ -1,4 +1,4 @@
-import { sanityClient } from "../../lib/client";
+import { sanityClient } from "../../lib/sanity";
 
 sanityClient.config({
   token: process.env.SANITY_WRITE_TOKEN,

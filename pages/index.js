@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
-import { sanityClient } from "../lib/client";
+import { sanityClient } from "../lib/sanity";
 import imageUrlBuilder from "@sanity/image-url";
 
 function urlFor(source) {
