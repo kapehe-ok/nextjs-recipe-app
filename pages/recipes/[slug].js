@@ -9,7 +9,7 @@ function urlFor(source) {
 
 export default function OneRecipe({ recipe }) {
   const [likes, setLikes] = useState(recipe.likes);
-
+  console.log(recipe);
   const addLike = async () => {
     console.log(recipe);
     const res = await fetch("/api/handle-like", {
@@ -49,7 +49,17 @@ export default function OneRecipe({ recipe }) {
         <img src={urlFor(recipe.mainImage).url()} />
 
         <div className="breakdown">
-          <div className="ingredients">{recipe.ingredients}</div>
+          <div className="ingredients">
+            {recipe.ingredient?.map((ingredient, index) => (
+              <div key={index} className="ingredient">
+                {ingredient.wholeNumber}
+                {ingredient.fraction}
+                {ingredient.unit}
+                <div></div>
+                {ingredient.ingredient.name}
+              </div>
+            ))}
+          </div>
 
           <div className="instructions">
             <BlockContent
@@ -108,7 +118,14 @@ export async function getStaticProps({ params }) {
           url
         }
       },
-      ingredient,
+      ingredient[]{
+        unit,
+        wholeNumber,
+        fraction,
+        ingredient->{
+          name
+        }
+      },
       instructions,
       likes
     }`,
