@@ -5,23 +5,9 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <nav className="header">
-        {/* left side */}
         <div>
           <Link href="/">
-            <a>Kap's Kitchen</a>
-          </Link>
-        </div>
-
-        {/* right side */}
-        <div>
-          <Link href="/">
-            <a>Home page</a>
-          </Link>
-          <Link href="/">
-            <a>Home page</a>
-          </Link>
-          <Link href="/">
-            <a>Home page</a>
+            <a>Kap's Kitchen 🍳</a>
           </Link>
         </div>
       </nav>

@@ -11,14 +11,13 @@ body {
   max-width: 80%;
   margin: 0 auto;
   padding: 12px 10px;
-  display: flex;
-  justify-content: space-between;
+  font-size: 25px;
 }
 
 .header a {
-  color: #747474;
+  color: #575555;
   display: inline-block;
-  padding: 4px 10px;
+  padding-top: 10px;
   text-decoration: none;
 }
 

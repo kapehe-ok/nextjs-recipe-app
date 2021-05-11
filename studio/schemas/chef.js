@@ -4,8 +4,8 @@ export default {
   type: "document",
   fields: [
     {
-      name: "chef",
-      title: "Chef",
+      name: "name",
+      title: "Chef's Name",
       type: "string",
     },
     {

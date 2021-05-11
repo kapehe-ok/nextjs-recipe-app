@@ -11,11 +11,11 @@ export default function Home({ recipes }) {
   return (
     <div>
       <Head>
-        <title>Giada's Butter Factory</title>
+        <title>Kap's Kitchen 🍍</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <h1>Welcome to Giada's Butter Factory</h1>
+      <h1>Welcome to Kaps's Kitchen</h1>
 
       {/* show all recipes */}
       <ul className="recipes-list">
