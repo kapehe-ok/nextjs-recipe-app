@@ -42,11 +42,7 @@ export async function getStaticProps() {
       _id,
       name,
       slug,
-      mainImage{
-        asset->{
-          _id,
-          url
-        }
+      mainImage
       },
     }`
   );

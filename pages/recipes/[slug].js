@@ -10,13 +10,9 @@ const recipeQuery = `*[_type == "recipe" && slug.current == $slug][0]{
       _id,
       name,
       slug,
-      mainImage{
-        asset->{
-          _id,
-          url
-        }
-      },
+      mainImage,
       ingredient[]{
+        _key,
         unit,
         wholeNumber,
         fraction,
@@ -59,7 +55,7 @@ export default function OneRecipe({ data, preview }) {
   };
 
   return (
-    <div className="recipe">
+    <article className="recipe">
       <h1>{recipe.name}</h1>
 
       {/* likes */}
@@ -81,28 +77,29 @@ export default function OneRecipe({ data, preview }) {
       </button>
 
       {/* the content for the recipe */}
-      <div className="content">
+      <main className="content">
         <img src={urlFor(recipe?.mainImage).url()} />
 
         <div className="breakdown">
-          <div className="ingredients">
-            {recipe.ingredient?.map((ingredient, index) => (
-              <div key={index} className="ingredient">
+          <ul className="ingredients">
+            {recipe.ingredient?.map((ingredient) => (
+              <li key={ingredient._key} className="ingredient">
                 {ingredient?.wholeNumber}
                 {ingredient?.fraction}
+                {" "}
                 {ingredient?.unit}
-                <div />
+                <br />
                 {ingredient?.ingredient?.name}
-              </div>
+              </li>
             ))}
-          </div>
-
-          <div className="instructions">
-            <PortableText blocks={recipe?.instructions} />
-          </div>
+          </ul>
+          <PortableText
+            className="instructions"
+            blocks={recipe?.instructions}
+          />
         </div>
-      </div>
-    </div>
+      </main>
+    </article>
   );
 }
 

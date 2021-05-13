@@ -111,7 +111,8 @@ img {
 }
 
 .ingredients {
-  padding: 25px;
+  list-style: none;
+  padding: 25px 10px;
   border-right: 0.5px solid #444;
 }
 
