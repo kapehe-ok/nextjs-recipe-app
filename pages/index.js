@@ -43,6 +43,21 @@ export default function Home({ recipes }) {
 }
 
 export async function getStaticProps() {
+<<<<<<< HEAD
   const recipes = await sanityClient.fetch(recipesQuery);
+=======
+  // get props from sanity using groq
+  // DO IT
+  const recipes = await sanityClient.fetch(
+    `*[_type == "recipe"]{
+      _id,
+      name,
+      slug,
+      mainImage
+      },
+    }`
+  );
+
+>>>>>>> cbc3e87a0ed45ca0ebe5ee86b0a5a2fa6ce7bd4b
   return { props: { recipes } };
 }
