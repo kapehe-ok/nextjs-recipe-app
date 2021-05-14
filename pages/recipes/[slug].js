@@ -25,6 +25,8 @@ const recipeQuery = `*[_type == "recipe" && slug.current == $slug][0]{
     }`;
 
 export default function OneRecipe({ data, preview }) {
+  if (!data) return <div>Loading...</div>;
+
   /**
    * This is the real-time preview functionality.
    * It takes the same GROQ query we use to fetch the data,
@@ -85,9 +87,7 @@ export default function OneRecipe({ data, preview }) {
             {recipe.ingredient?.map((ingredient) => (
               <li key={ingredient._key} className="ingredient">
                 {ingredient?.wholeNumber}
-                {ingredient?.fraction}
-                {" "}
-                {ingredient?.unit}
+                {ingredient?.fraction} {ingredient?.unit}
                 <br />
                 {ingredient?.ingredient?.name}
               </li>
@@ -127,9 +127,11 @@ export async function getStaticPaths() {
 // STEP 2: tell next.js how to get data for each individual recipe
 export async function getStaticProps({ params }) {
   const { slug } = params;
+
   // go get the recipe data from sanity using groq
   // const recipe = sanity groq query using params.slug
   const recipe = await sanityClient.fetch(recipeQuery, { slug });
+
   // we just pass
   return { props: { data: { recipe }, preview: true } };
 }

@@ -10,7 +10,6 @@ const recipesQuery = `*[_type == "recipe" && slug.current != null]{
 }`;
 
 export default function Home({ recipes }) {
-  console.log(recipes);
   return (
     <div>
       <Head>
